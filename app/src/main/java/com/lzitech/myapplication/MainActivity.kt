@@ -7,11 +7,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lzitech.myapplication.adapters.ItemAdapter
+import com.lzitech.myapplication.models.Item
 import kotlin.random.Random
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ItemAdapter.OnItemClickListener {
     private val listOfItems = generateDummyList(100)
-    private val adapter = ItemAdapter(listOfItems as MutableList<Item>)
+    private val adapter = ItemAdapter(listOfItems as MutableList<Item>, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +35,13 @@ class MainActivity : AppCompatActivity() {
             items.add(item)
         }
         return items
+    }
+
+    override fun onItemClick(position: Int) {
+        Toast.makeText(this, "item $position clicked", Toast.LENGTH_SHORT).show()
+        val clickedItem = listOfItems.get(position)
+        clickedItem.title1 = "clicked"
+        adapter.notifyItemChanged(position)
     }
 
     fun insert(view: View) {
